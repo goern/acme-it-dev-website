@@ -1,0 +1,26 @@
+---
+- hosts: localhost
+  vars:
+    openshift_master_url: https://acme-ocp3-haproxy-0.acme.e2e.bos.redhat.com:8443
+
+  tasks:
+  - name: NOOP FIXME TODO check if we are logged in and can access the acme-dev-infra project
+    command: oc status
+    register: acme_dev_infra_status
+
+  - name: check if the template already exists
+    command: oc get template acme-it-dev-website
+    register: acme_it_dev_website_template
+
+  - name: create Application template
+    command: oc create -f openshift-template.yaml
+    ignore_errors: yes
+    when: acme_it_dev_website_template|failed
+
+  - name: replace Application template
+    command: oc replace -f openshift-template.yaml
+    ignore_errors: yes
+    when: acme_it_dev_website_template
+
+  - name: create a new application from the template
+    command: oc new-app --template=acme-it-dev-website -p APPLICATION_DOMAIN=www.apps.acme.e2e.bos.redhat.com

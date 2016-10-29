@@ -1,0 +1,150 @@
+---
+  kind: "Template"
+  apiVersion: "v1"
+  metadata:
+    name: "acme-it-dev-website"
+    annotations:
+      description: "ACME Corp IT Development department homepage"
+      tags: "instant-app,nodejs,patternfly"
+      iconClass: "icon-nodejs"
+    labels:
+      template: "acme-it-dev-website"
+  objects:
+    - kind: "ImageStream"
+      apiVersion: "v1"
+      metadata:
+        description: "This is a s2i for nginx 1.8"
+        name: "s2i-nginx"
+      spec:
+        dockerImageRepository: "goern/s2i-nginx"
+      tags:
+        - name: "latest"
+    - kind: "ImageStream"
+      apiVersion: "v1"
+      metadata:
+        name: "acme-it-dev-website"
+        creationTimestamp: null
+        annotations:
+          description: "Keeps track of changes in the website image"
+        spec: {}
+        status:
+          dockerImageRepository: ""
+    - kind: "Service"
+      apiVersion: "v1"
+      metadata:
+        name: acme-it-dev-website
+        annotations:
+          description: "Exposes and load balances the web user interface"
+      spec:
+        ports:
+          -
+            name: web
+            port: 80
+            targetPort: 8080
+        selector:
+          name: acme-it-dev-website
+    - kind: BuildConfig
+      apiVersion: v1
+      metadata:
+        name: acme-it-dev-website-s2i-nginx
+        annotations:
+          description: "Defines a s2i based build of the acme-it-dev-website"
+      spec:
+        completionDeadlineSeconds: 480
+        source:
+          type: "Git"
+          git:
+            uri: "${FRONTEND_SOURCE_REPOSITORY_URL}"
+            ref: "${FRONTEND_SOURCE_REPOSITORY_REF}"
+          contextDir: "${FRONTEND_CONTEXT_DIR}"
+        strategy:
+          type: "Source"
+          sourceStrategy:
+            from:
+              kind: "ImageStreamTag"
+              name: "s2i-nginx:latest"
+        output:
+          to:
+            kind: "ImageStreamTag"
+            name: "acme-it-dev-website:latest"
+        triggers:
+          - type: "ConfigChange"
+    - kind: DeploymentConfig
+      apiVersion: v1
+      metadata:
+        name: acme-it-dev-website
+        annotations:
+          description: "Defines how to deploy the UI for acme-it-dev-website"
+      spec:
+        strategy:
+          type: "Rolling"
+        triggers:
+          - type: "ImageChange"
+            imageChangeParams:
+              automatic: true
+              containerNames:
+                - acme-it-dev-website
+              from:
+                kind: ImageStreamTag
+                name: acme-it-dev-website:latest
+          - type: ConfigChange
+        replicas: 2
+        selector:
+          name: acme-it-dev-website
+        template:
+          metadata:
+            name: acme-it-dev-website
+            labels:
+              name: acme-it-dev-website
+          spec:
+            containers:
+              - name: acme-it-dev-website
+                image: acme-it-dev-website
+                ports:
+                  - containerPort: 8080
+                readinessProbe:
+                  failureThreshold: 3
+                  httpGet:
+                    path: /
+                    port: 8080
+                    scheme: HTTP
+                  initialDelaySeconds: 15
+                  periodSeconds: 10
+                  successThreshold: 1
+                  timeoutSeconds: 2
+                livenessProbe:
+                  failureThreshold: 3
+                  httpGet:
+                    path: /
+                    port: 8080
+                    scheme: HTTP
+                  initialDelaySeconds: 60
+                  periodSeconds: 10
+                  successThreshold: 1
+                  timeoutSeconds: 2
+    - kind: Route
+      apiVersion: v1
+      metadata:
+        name: acme-it-dev-website
+      spec:
+        host: "${APPLICATION_DOMAIN}"
+        to:
+          kind: Service
+          name: acme-it-dev-website
+  parameters:
+    -
+      name: "APPLICATION_DOMAIN"
+      description: "The exposed hostname that will route to the currentweather service, if left blank a value will be defaulted."
+      value: ""
+    -
+      name: "FRONTEND_SOURCE_REPOSITORY_URL"
+      description: "The URL of the repository with your application source code"
+      value: "https://github.com/goern/currentweather-ui.git"
+    -
+      name: "FRONTEND_SOURCE_REPOSITORY_REF"
+      description: "Set this to a branch name, tag or other ref of your repository if you are not using the default branch"
+      value: "master"
+    -
+      name: "FRONTEND_CONTEXT_DIR"
+      description: "Set this to the relative path to your project if it is not in the root of your repository"
+      value: "/"
