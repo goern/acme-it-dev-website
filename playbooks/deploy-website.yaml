@@ -1,7 +1,8 @@
 ---
 - hosts: localhost
-  vars:
+  vars: # FIXME DRY
     openshift_master_url: https://acme-ocp3-haproxy-0.acme.e2e.bos.redhat.com:8443
+    website_hostname: www.apps.acme.e2e.bos.redhat.com
 
   tasks:
   - name: NOOP FIXME TODO check if we are logged in and can access the acme-dev-infra project
@@ -23,4 +24,4 @@
     when: acme_it_dev_website_template
 
   - name: create a new application from the template
-    command: oc new-app --template=acme-it-dev-website -p APPLICATION_DOMAIN=www.apps.acme.e2e.bos.redhat.com
+    command: oc new-app --template=acme-it-dev-website -p APPLICATION_DOMAIN={{ website_hostname }}

@@ -134,7 +134,7 @@
   parameters:
     -
       name: "APPLICATION_DOMAIN"
-      description: "The exposed hostname that will route to the currentweather service, if left blank a value will be defaulted."
+      description: "The exposed hostname that will route to the website service, if left blank a value will be defaulted."
       value: ""
     -
       name: "FRONTEND_SOURCE_REPOSITORY_URL"
