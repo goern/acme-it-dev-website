@@ -42,8 +42,7 @@
       <h1>This is ACME Corp - IT</h1>
 
       <div class="row row-cards-pf">
-        <h2>Applications hosted</h2>
-        <!-- Important:  if you need to nest additional .row within a .row.row-cards-pf, do *not* use .row-cards-pf on the nested .row  -->
+        <!-- h2>Applications hosted</h2>
         <div class="col-xs-12 col-sm-12 col-md-12">
           <div class="card-pf card-pf-accented card-pf-aggregate-status" style="height: 89px;">
             <h2 id="app-1-name" class="card-pf-title">The Red Hat Cool Store</h2>
@@ -54,7 +53,7 @@
             </div>
           </div>
         </div>
-      </div><!-- /row -->
+      </div --><!-- /row -->
 
 
       <div class="row row-cards-pf">
@@ -84,6 +83,17 @@
 
         <div class="col-xs-6 col-sm-4 col-md-2">
           <div class="card-pf card-pf-accented card-pf-aggregate-status" style="height: 89px;">
+            <h2 id="service-2-name" class="card-pf-title">Content Management Service</h2>
+            <div class="card-pf-body" style="height: 50px;">
+              <p class="card-pf-aggregate-status-notifications">
+                <span class="pficon pficon-ok"></span><span class="card-pf-aggregate-status-notification" id="service-2-url"><a href="https://registry-console-default.apps.acme.e2e.bos.redhat.com/registry">OCP Container Registry</a></span>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xs-6 col-sm-4 col-md-2">
+          <div class="card-pf card-pf-accented card-pf-aggregate-status" style="height: 89px;">
             <h2 id="service-3-name" class="card-pf-title">Code Quality Management Service</h2>
             <div class="card-pf-body" style="height: 50px;">
               <p class="card-pf-aggregate-status-notifications">
@@ -98,7 +108,7 @@
             <h2 id="service-3-name" class="card-pf-title">CI/CD Service</h2>
             <div class="card-pf-body" style="height: 50px;">
               <p class="card-pf-aggregate-status-notifications">
-                <span class="pficon pficon-ok"></span><span class="card-pf-aggregate-status-notification" id="service-4-url"><a href="#">Jenkins</a></span>
+                <span class="pficon pficon-error-circle-o"></span><span class="card-pf-aggregate-status-notification" id="service-4-url"><a href="#">Jenkins</a></span>
               </p>
             </div>
           </div>
