@@ -13,8 +13,8 @@
 
     <link rel="stylesheet" href="patternfly/css/patternfly.min.css" />
     <link rel="stylesheet" href="patternfly/css/patternfly-additions.min.css" />
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.matchHeight/0.6.0/jquery.matchHeight-min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.matchHeight/0.6.0/jquery.matchHeight-min.js"></script>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -41,9 +41,49 @@
     <div class="container-fluid container-cards-pf">
       <h1>This is ACME Corp</h1>
 
-      <p>
-        Please use the <a href="https://secure-sso-acme-infra.apps.acme.e2e.bos.redhat.com/auth/realms/acme/protocol/openid-connect/auth?client_id=account&redirect_uri=https%3A%2F%2Fsecure-sso-acme-infra.apps.acme.e2e.bos.redhat.com%2Fauth%2Frealms%2Facme%2Faccount%2Flogin-redirect?path%3Dapplications&state=0%2F6400c76d-59d0-42ba-8f15-816b99ffeeaf&response_type=code">ACME Corp Single Sign On Service</a>!
-      </p>
+      <div class="container">
+  			<h1>Using the OpenID Connect Button</h1>
+  			<p>
+  				<!-- OpenID Connect Button - Step 3: add HTML element representing button -->
+  				<span id="signinButton">
+  					<span class="oidc-signin"
+  						data-callback="signinCallback"
+  						data-name="ACME Corp SSO"
+  						data-logo="assets/images/logo-alt.svg"
+  						data-size="lg"
+  						data-server="https://secure-sso-acme-infra.apps.acme.e2e.bos.redhat.com/auth/realms/acme"
+  						data-clientid="acme-website-openid"
+  						data-scope="openid phone email address profile">
+  					</span>
+  				</span>
+  			</p>
+  			<h2 id="status"/>
+  		</div>
+
+      <script type="text/javascript" src="https://cdn.jsdelivr.net/jsrsasign/6.2.2/jsrsasign.js"></script>
+
+      <script type="text/javascript">
+
+  			// OpenID Connect Button - Step 4: implement a callback function
+  			function signinCallback(result) {
+  				if(result === "success"){
+  					// at this point, developers have access to several pieces of information
+  					// relevant to OpenID Connect (see ./oidc-button.js)
+  					console.log("OpenID Connect Provider Configuration:");
+  					console.log(oidc_provider_config);
+  					console.log("OpenID Connect User Info:");
+  					console.log(oidc_userinfo);
+  					console.log("OpenID Connect ID Token:");
+  					console.log(oidc_idtoken);
+
+  					$("#status").html("Hello, " + oidc_userinfo.name + "!");
+  				} else {
+  					console.log("not signed in...");
+  					console.log(result);
+  					$("#status").html("Do I know you?!");
+  				}
+  			}
+  		</script>
 
       <div class="row row-cards-pf">
         <h2>Applications hosted</h2>
@@ -190,6 +230,13 @@ $(document).ready(function () {
 
 });
 </script>
-
+<!-- OpenID Connect Button - Step 2: add this script element right before closing </body> tag -->
+<script type="text/javascript">
+  (function() {
+   var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+   po.src = './oidc-button.js';
+   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+ })();
+</script>
   </body>
 </html>
