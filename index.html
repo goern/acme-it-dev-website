@@ -33,7 +33,19 @@
     </div>
     <nav class="collapse navbar-collapse">
       <ul class="nav navbar-nav navbar-right navbar-iconic">
+        <li><span id="openid_status"/></li>
 
+        <li><span id="signinButton">
+          					<span class="oidc-signin"
+          						data-callback="signinCallback"
+          						data-name="ACME Corp SSO"
+          						data-logo="assets/images/logo-alt.svg"
+          						data-size="sm"
+          						data-server="https://secure-sso-acme-infra.apps.acme.e2e.bos.redhat.com/auth/realms/acme"
+          						data-clientid="acme-website-openid"
+          						data-scope="openid phone email address profile">
+          					</span>
+          				</span></li>
       </ul>
     </nav>
   </nav> <!--/.navbar-->
@@ -42,22 +54,10 @@
       <h1>This is ACME Corp</h1>
 
       <div class="container">
-  			<h1>Using the OpenID Connect Button</h1>
   			<p>
   				<!-- OpenID Connect Button - Step 3: add HTML element representing button -->
-  				<span id="signinButton">
-  					<span class="oidc-signin"
-  						data-callback="signinCallback"
-  						data-name="ACME Corp SSO"
-  						data-logo="assets/images/logo-alt.svg"
-  						data-size="lg"
-  						data-server="https://secure-sso-acme-infra.apps.acme.e2e.bos.redhat.com/auth/realms/acme"
-  						data-clientid="acme-website-openid"
-  						data-scope="openid phone email address profile">
-  					</span>
-  				</span>
+
   			</p>
-  			<h2 id="status"/>
   		</div>
 
       <script type="text/javascript" src="https://cdn.jsdelivr.net/jsrsasign/6.2.2/jsrsasign.js"></script>
@@ -76,11 +76,11 @@
   					console.log("OpenID Connect ID Token:");
   					console.log(oidc_idtoken);
 
-  					$("#status").html("Hello, " + oidc_userinfo.name + "!");
+  					$("#openid_status").html("Thanks, " + oidc_userinfo.name + "! You are signed in...");
   				} else {
   					console.log("not signed in...");
   					console.log(result);
-  					$("#status").html("Do I know you?!");
+  					$("#openid_status").html("Do I know you?! Please sign in...");
   				}
   			}
   		</script>
