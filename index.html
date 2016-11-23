@@ -53,13 +53,6 @@
     <div class="container-fluid container-cards-pf">
       <h1>This is ACME Corp</h1>
 
-      <div class="container">
-  			<p>
-  				<!-- OpenID Connect Button - Step 3: add HTML element representing button -->
-
-  			</p>
-  		</div>
-
       <script type="text/javascript" src="jsrsasign-latest-all-min.js"></script>
 
       <script type="text/javascript">
@@ -76,7 +69,7 @@
   					console.log("OpenID Connect ID Token:");
   					console.log(oidc_idtoken);
 
-  					$("#openid_status").html("Thanks, " + oidc_userinfo.name + "! You are signed in...");
+  					$("#openid_status").html('<a href="https://secure-sso-acme-infra.apps.acme.e2e.bos.redhat.com/auth/realms/acme/protocol/openid-connect/logout?redirect_uri=http%3A%2F%2Fwww.apps.acme.e2e.bos.redhat.com">Sign out!</a>');
   				} else {
   					console.log("not signed in...");
   					console.log(result);
