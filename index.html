@@ -35,17 +35,7 @@
       <ul class="nav navbar-nav navbar-right navbar-iconic">
         <li><span id="openid_status"/></li>
 
-        <li><span id="signinButton">
-          					<span class="oidc-signin"
-          						data-callback="signinCallback"
-          						data-name="ACME Corp SSO"
-          						data-logo="assets/images/logo-alt.svg"
-          						data-size="sm"
-          						data-server="https://secure-sso-acme-infra.apps.acme.e2e.bos.redhat.com/auth/realms/acme"
-          						data-clientid="acme-website-openid"
-          						data-scope="openid phone email address profile">
-          					</span>
-          				</span></li>
+        <li><a href="https://secure-sso-acme-infra.apps.acme.e2e.bos.redhat.com/auth/realms/acme/account/">sign in</a></li>
       </ul>
     </nav>
   </nav> <!--/.navbar-->
@@ -69,7 +59,7 @@
   					console.log("OpenID Connect ID Token:");
   					console.log(oidc_idtoken);
 
-  					$("#openid_status").html('<a href="https://secure-sso-acme-infra.apps.acme.e2e.bos.redhat.com/auth/realms/acme/protocol/openid-connect/logout?redirect_uri=http%3A%2F%2Fwww.apps.acme.e2e.bos.redhat.com">Sign out!</a>');
+  					$("#openid_status").html('<a href="https://secure-sso-acme-infra.apps.acme.e2e.bos.redhat.com/auth/realms/acme/protocol/openid-connect/logout?redirect_uri=http%3A%2F%2Fwww.apps.acme.e2e.bos.redhat.com">Sign out!</a> ');
   				} else {
   					console.log("not signed in...");
   					console.log(result);
